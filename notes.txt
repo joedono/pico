@@ -1,0 +1,35 @@
+Trying to figure out what my next AB game is going to be. I know I want to use the pico-8, give that engine a try. So what simple arcade game can I make this time? The theme is probably still going to be "food"....I think.
+
+I could do the "burger time" idea I had before. Where it works sort of like tetris but you have to make complete sandwiches. I feel like that's not quite Japanese enough though. Maybe I could do a simple reaction-time based game, where you have to identify the ingredients as fast as you can after they appear. That would be pretty simple to code, I think. I come up with 4 or 5 different ingredients, and have them show up in pairs, then the player presses x or z to pick which one they are prompted for.
+
+Yeah, let's just go with that. We'll call it Abby's Food School.
+
+New idea: Make it educational about japanese food cooking. I'll need 4 Japanese dishes, with probably 4 ingredients each. It'll still be a timed thing, but a little more complicated. I'll arrange the ingredients in a 3x3 grid, and then list the dish and the desired ingredients above them. The names for each ingredient will only appear when the cursor is on them. The player has to select the correct 4 ingredients in the fastest time possible. Selecting the wrong one will freeze the cursor for a period of time.
+
+Dishes:
+Katsudon - pork, eggs, soy sauce, flour
+Chahan (Pork Fried Rice) - rice, pork, oil, egg
+Sushi - rice, seaweed, fish, avocado
+Ramen - pork, ginger, noodles, naruto maki
+
+Ingredients
+pork, eggs, soy sauce, flour, rice, oil, seaweed, fish, avocado, ginger, noodles, naruto maki
+
+Start the game with a "ready, set..... (wait a random amount of time) GO!
+Choose a random recipe
+Show the recipe sprite next to Abby
+Show the recipe text and ingredients down the side
+Pick the 4 ingredients plus 5 random ones from the ingredients
+Shuffle them
+Draw them in a 3x3 grid on the table (without labels)
+Draw the selection box. Show the label of the highlighted ingredient under it
+If one is picked correctly, green out it's name on the list and draw a green circle around it
+If one is picked incorrectly, freeze the selection for a second or two and put a red x over the ingredient
+
+states
+0 = Ready
+1 = Set
+2 = Go
+3 = Selecting
+4 = Wrong Selection
+5 = Success
