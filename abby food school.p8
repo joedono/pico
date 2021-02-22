@@ -74,18 +74,6 @@ function _draw()
   print(timer,8,26,7);
  end
 end
-
-function draw_cursor()
- local x=cur[1]*16+25;
- local y=cur[2]*16+42;
- 
- rect(x,y,x+13,y+12,11);
-end
-
-function draw_select_text()
- local ingre=get_selected_ingredient();
- print(ingre.n,64-#(ingre.n)*2,116,7);
-end
 -->8
 -- food
 
@@ -156,11 +144,53 @@ end
 function init_player()
  player_normal=1;
  player_happy=2;
- player_sad=3
+ player_sad=3;
 end
 
 function draw_player()
- spr(player_normal,60,36);
+ local cur_mood=player_normal;
+ if (state==4) cur_mood=player_sad;
+ if (state==5) cur_mood=player_happy;
+ 
+ spr(cur_mood,60,36);
+end
+-->8
+-- gameplay
+
+function update_cursor()
+ local x=cur[1];
+ local y=cur[2];
+ 
+ if (btnp(⬆️)) y=y-1;
+ if (btnp(⬇️)) y=y+1;
+ if (btnp(⬅️)) x=x-1;
+ if (btnp(➡️)) x=x+1;
+ 
+ if (y<1) y=3;
+ if (y>3) y=1;
+ if (x<1) x=3;
+ if (x>3) x=1;
+ 
+ cur[1]=x;
+ cur[2]=y;
+end
+
+function update_select()
+ if (btnp(❎)) then
+  
+ end
+end
+
+function draw_cursor()
+ local x=cur[1]*16+25;
+ local y=cur[2]*16+42;
+ 
+ rect(x,y,x+13,y+12,11);
+end
+
+function draw_select_text()
+ local ingre=get_selected_ingredient();
+ print(ingre.n,64-#(ingre.n)*2,116,7);
 end
 -->8
 -- utility
@@ -188,32 +218,6 @@ function shuffle(t)
  end
  
  return t;
-end
--->8
--- gameplay
-
-function update_cursor()
- local x=cur[1];
- local y=cur[2];
- 
- if (btnp(⬆️)) y=y-1;
- if (btnp(⬇️)) y=y+1;
- if (btnp(⬅️)) x=x-1;
- if (btnp(➡️)) x=x+1;
- 
- if (y<1) y=3;
- if (y>3) y=1;
- if (x<1) x=3;
- if (x>3) x=1;
- 
- cur[1]=x;
- cur[2]=y;
-end
-
-function update_select()
- if (btnp(❎)) then
-  
- end
 end
 __gfx__
 000000000cccccc00cccccc00cccccc000000000000000000333333000000000000000ff0007700000555500777007777700077700555500033333b300000000
