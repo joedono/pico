@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 29
+version 30
 __lua__
 -- abby's food school
 -- lordjoe
@@ -67,6 +67,7 @@ function _draw()
   draw_recipe();
   draw_ingredients();
   draw_cursor();
+  draw_select_text();
  end
  
  if (state==2 or state==3) then
@@ -78,8 +79,12 @@ function draw_cursor()
  local x=cur[1]*16+25;
  local y=cur[2]*16+42;
  
- 
  rect(x,y,x+13,y+12,11);
+end
+
+function draw_select_text()
+ local ingre=get_selected_ingredient();
+ print(ingre.n,64-#(ingre.n)*2,116,7);
 end
 -->8
 -- food
@@ -122,11 +127,13 @@ function init_recipe()
    add(avail_ingred,n);
   end
  end
+ 
+ avail_ingred=shuffle(avail_ingred);
 end
 
 function draw_recipe()
  local r = foods[recipe];
- print(r.n,98,28);
+ print(r.n,95,26);
  spr(r.s,108,36);
  
  for k,v in pairs(r.r) do
@@ -164,6 +171,23 @@ function table_contains(t,v)
  end
  
  return false;
+end
+
+function get_selected_ingredient()
+ local x=cur[1];
+ local y=cur[2];
+ local i=x+(y-1)*3;
+ 
+ return ingredients[avail_ingred[i]];
+end
+
+function shuffle(t)
+ for n=1,#t*2 do
+  local a,b=flr(1+rnd(#t)),flr(1+rnd(#t));
+  t[a],t[b]=t[b],t[a];
+ end
+ 
+ return t;
 end
 -->8
 -- gameplay
