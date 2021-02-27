@@ -52,6 +52,12 @@ function _update()
   timer=timer+1;
   update_cursor();
   update_select()
+ elseif (state==4) then
+  timer=timer+1;
+ elseif (state==5) then
+  if (btnp(❎) or btnp(🅾️)) then
+   _init();
+  end
  end
 end
 
@@ -64,15 +70,18 @@ function _draw()
  if (state==1) print("steady",52,26,7);
  if (state==2) print("go!!",56,26,7);
  
- if (state>=2) then
+ if (state>=2 and state<5) then
   draw_recipe();
   draw_ingredients();
+  draw_chosen_ingredients();
   draw_cursor();
   draw_select_text();
- end
- 
- if (state==2 or state==3) then
   print(timer,8,26,7);
+ elseif (state==5) then
+  local r = foods[recipe];
+  print("congradulations!!",32,26,7);
+  spr(r.s,60,60);
+  print("press ❎ or 🅾️ to try again",10,118,7);
  end
 end
 -->8
@@ -100,6 +109,8 @@ function init_food()
   { n="noodles",s=18 },
   { n="naruto",s=19 },
  };
+ 
+ chosen_ingred={};
 end
 
 function init_recipe()
@@ -120,6 +131,29 @@ function init_recipe()
  avail_ingred=shuffle(avail_ingred);
 end
 
+function is_ingred_valid()
+ local ingred=get_selected_ingredient();
+ 
+ for ci in all(chosen_ingred) do
+  if ingred.s==ci.s then
+   return false;
+  end
+ end
+ 
+ for i in all(foods[recipe].r) do
+  if ingred.s==ingredients[i].s then
+   return true;
+  end
+ end
+ 
+ return false; 
+end
+
+function add_selected_ingred()
+ local ingred=get_selected_ingredient();
+ add(chosen_ingred,ingred);
+end
+
 function draw_recipe()
  local r = foods[recipe];
  print(r.n,95,26);
@@ -137,6 +171,12 @@ function draw_ingredients()
    spr(ingredients[avail_ingred[i]].s,x*16+28,y*16+44);
    i=i+1;
   end
+ end
+end
+
+function draw_chosen_ingredients()
+ for k,v in pairs(chosen_ingred) do
+  print(v.n,4,40+(k*10),7);
  end
 end
 -->8
@@ -177,8 +217,22 @@ function update_cursor()
 end
 
 function update_select()
- if (btnp(❎)) then
-  
+ if (btnp(❎) or btnp(🅾️)) then
+  if (is_ingred_valid()) then
+   add_selected_ingred();
+   check_win();
+  else
+   state=4;
+   state_timer=30;
+   sfx(2);
+  end
+ end
+end
+
+function check_win()
+ if #chosen_ingred==4 then
+  sfx(3);
+  state=5;
  end
 end
 
@@ -186,7 +240,11 @@ function draw_cursor()
  local x=cur[1]*16+25;
  local y=cur[2]*16+42;
  
- rect(x,y,x+13,y+12,11);
+ if (state==2 or state==3) then
+  rect(x,y,x+13,y+12,11);
+ elseif (state==4) then
+  rect(x,y,x+13,y+12,8);
+ end
 end
 
 function draw_select_text()
@@ -266,3 +324,5 @@ __map__
 __sfx__
 00020000386503765036650356501f6501c6501864014640116300f6200c6200961008610227000f6001e7000e6000d6001b7000c6000c6000b60024600256000a600286000960009600096000a6000b6000c600
 000300002705027050270001f0001f0001f0001f0001f000200000000020000200002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+000900001c2501925015250102500b25006250012500023000210002100020005200052000120004200072000c20012200182001b2001c200192000d2000b2000e20012200132000000000000000000000000000
+00100000330502a050250501d05017050140501205011050110501205014050170501b0501e0502205026050280502b0502d0502e0502e0402e0202e0102e0002e0002e0001e0000000000000000000000000000
