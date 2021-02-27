@@ -56,6 +56,7 @@ function _update()
   timer=timer+1;
  elseif (state==5) then
   if (btnp(❎) or btnp(🅾️)) then
+   sfx(-1);
    _init();
   end
  end
@@ -78,11 +79,23 @@ function _draw()
   draw_select_text();
   print(timer,8,26,7);
  elseif (state==5) then
-  local r = foods[recipe];
-  print("congradulations!!",32,26,7);
-  spr(r.s,60,60);
-  print("press ❎ or 🅾️ to try again",10,118,7);
+  draw_win_screen();
  end
+end
+
+function draw_win_screen()
+ local r=foods[recipe];
+ print("congradulations!!",32,26,7);
+ 
+ print("you made",48,60);
+ spr(r.s,60,66);
+ print(r.n,64-#(r.n)*2,76);
+ 
+ print("in",60,84);
+ local t = timer.." seconds";
+ print(t,64-#t*2,92);
+ 
+ print("press ❎ or 🅾️ to try again",10,118,7);
 end
 -->8
 -- food
